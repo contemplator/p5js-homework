@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Processing</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    let img1, img2, img3;
+    let theta = 0;
+
+    function setup() {
+      createCanvas(windowWidth, windowHeight, WEBGL);
+      textureMode(NORMAL);
+      img1 = loadImage('assets/cat.png');
+      img2 = loadImage('assets/fox.jpg');
+      img3 = loadImage('assets/basketball.png');
+    }
+
+    function draw() {
+      background(0);
+      ambientLight(255);
+      directionalLight(255, 255, 255, 0, 0, 1);
+
+      rotateX(theta * 0.1);
+      rotateY(theta * 0.1);
+      rotateZ(theta * 0.1);
+      // translate(-50, -50);
+
+      // +Z "front" face
+      push();
+      texture(img1);
+      beginShape();
+      vertex(-100, -100, 100, 0, 0);
+      vertex(100, -100, 100, 1, 0);
+      vertex(100, 100, 100, 1, 1);
+      vertex(-100, 100, 100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      // -Z "back" face
+      push();
+      texture(img1);
+      beginShape();
+      vertex(100, -100, -100, 0, 0);
+      vertex(-100, -100, -100, 1, 0);
+      vertex(-100, 100, -100, 1, 1);
+      vertex(100, 100, -100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      // +Y "bottom" face
+      push();
+      texture(img2);
+      beginShape();
+      vertex(-100, 100, 100, 0, 0);
+      vertex(100, 100, 100, 1, 0);
+      vertex(100, 100, -100, 1, 1);
+      vertex(-100, 100, -100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      // -Y "top" face
+      push();
+      texture(img2);
+      beginShape();
+      vertex(-100, -100, -100, 0, 0);
+      vertex(100, -100, -100, 1, 0);
+      vertex(100, -100, 100, 1, 1);
+      vertex(-100, -100, 100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      // +X "right" face
+      push();
+      texture(img3);
+      beginShape();
+      vertex(100, -100, 100, 0, 0);
+      vertex(100, -100, -100, 1, 0);
+      vertex(100, 100, -100, 1, 1);
+      vertex(100, 100, 100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      // -X "left" face
+      push();
+      texture(img3);
+      beginShape();
+      vertex(-100, -100, -100, 0, 0);
+      vertex(-100, -100, 100, 1, 0);
+      vertex(-100, 100, 100, 1, 1);
+      vertex(-100, 100, -100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      theta += 0.05;
+    }
+  </script>
+</body>
+
+</html>
