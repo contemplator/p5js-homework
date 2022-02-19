@@ -31,7 +31,7 @@
       img2 = loadImage('assets/fox.jpg');
       img3 = loadImage('assets/basketball.png');
       vid1 = createVideo(['assets/Cube_Face_1.mp4']);
-      // vid1.elt.muted = true;
+      vid1.elt.muted = true;
       vid1.loop();
       vid1.hide();
       // windowWidth = window.innerWidth;
@@ -80,7 +80,7 @@
 
       // -Y "top" face
       push();
-      texture(img1);
+      texture(img2);
       beginShape();
       vertex(-100, -100, -100, 0, 0);
       vertex(100, -100, -100, 1, 0);
