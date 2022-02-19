@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Processing</title>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    let img1, img2, img3, vid1;
+    let curValue = 0;
+    let targetValue = 0;
+    let abs = 0;
+    let rotateSpeed = 0.05;
+
+    function setup() {
+      createCanvas(windowWidth, windowHeight, WEBGL);
+      textureMode(NORMAL);
+      img1 = loadImage('assets/cat.png');
+      img2 = loadImage('assets/fox.jpg');
+      img3 = loadImage('assets/basketball.png');
+      vid1 = createVideo(['assets/Cube_Face_1.mp4']);
+      // vid1.elt.muted = true;
+      vid1.loop();
+      vid1.hide();
+      // windowWidth = window.innerWidth;
+    }
+
+    function draw() {
+      background(0);
+      ambientLight(255);
+      directionalLight(255, 255, 255, 0, 0, 1);
+      rotateX(-0.3);
+      getProcess();
+      rotateY(curValue);
+
+      // +Z "front" face
+      push();
+      texture(vid1);
+      beginShape();
+      vertex(-100, -100, 100, 0, 0);
+      vertex(100, -100, 100, 1, 0);
+      vertex(100, 100, 100, 1, 1);
+      vertex(-100, 100, 100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      // -Z "back" face
+      push();
+      texture(img1);
+      beginShape();
+      vertex(100, -100, -100, 0, 0);
+      vertex(-100, -100, -100, 1, 0);
+      vertex(-100, 100, -100, 1, 1);
+      vertex(100, 100, -100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      // +Y "bottom" face
+      push();
+      texture(img2);
+      beginShape();
+      vertex(-100, 100, 100, 0, 0);
+      vertex(100, 100, 100, 1, 0);
+      vertex(100, 100, -100, 1, 1);
+      vertex(-100, 100, -100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      // -Y "top" face
+      push();
+      texture(img1);
+      beginShape();
+      vertex(-100, -100, -100, 0, 0);
+      vertex(100, -100, -100, 1, 0);
+      vertex(100, -100, 100, 1, 1);
+      vertex(-100, -100, 100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      // +X "right" face
+      push();
+      texture(vid1);
+      beginShape();
+      vertex(100, -100, 100, 0, 0);
+      vertex(100, -100, -100, 1, 0);
+      vertex(100, 100, -100, 1, 1);
+      vertex(100, 100, 100, 0, 1);
+      endShape(CLOSE);
+      pop();
+
+      // -X "left" face
+      push();
+      texture(vid1);
+      beginShape();
+      vertex(-100, -100, -100, 0, 0);
+      vertex(-100, -100, 100, 1, 0);
+      vertex(-100, 100, 100, 1, 1);
+      vertex(-100, 100, -100, 0, 1);
+      endShape(CLOSE);
+      pop();
+    }
+
+    function mouseClicked(event) {
+      if (event.clientX > windowWidth / 2) {
+        targetValue = -PI / 2;
+        abs = -1;
+      } else {
+        targetValue = PI / 2;
+        abs = 1;
+      }
+    }
+
+    function getProcess() {
+      if (abs === 1) {
+        curValue = curValue >= targetValue ? targetValue : curValue + rotateSpeed;
+      } else {
+        curValue = curValue <= targetValue ? targetValue : curValue - rotateSpeed;
+      }
+    }
+  </script>
+</body>
+
+</html>
