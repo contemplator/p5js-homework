@@ -2,12 +2,11 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="cache-control" content="no-cache">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
   <title>Processing</title>
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <script src="assets/p5.min.js"></script>
   <style>
     body {
       padding: 0;
@@ -18,17 +17,49 @@
 
 <body>
   <script>
+    // https://p5js.org/examples/typography-text-rotation.html
+    let msg1 = '春乏夏累秋睏冬眠';
+    let msg2 = '東趴南靠西臥北躺';
+    let msg3 = '';
+    let angleRotate1 = 0.0;
+    let angleRotate2 = 0.0;
+    let font;
+    
+    function preload() {
+      font = loadFont('assets/NotoSansTC-Regular.otf');
+    }
+
     function setup() {
       createCanvas(windowWidth, windowHeight, WEBGL);
+      textSize(30);
+      textFont(font);
+      angleRotate1 = -90.0;
+      angleRotate2 = 0; 
     }
 
     function draw() {
-      noFill();
       background(0);
-      stroke(0, 255, 0);
-      rotateX(frameCount * 0.01);
-      rotateY(frameCount * 0.01);
-      box(90, 90, 90);
+      strokeWeight(1);
+      stroke(153);
+
+      push();
+      rotate(radians(angleRotate1));
+      text(msg1, 0, 0);
+      line(0, 0, 150, 0);
+      pop();
+
+      push();
+      rotate(radians(angleRotate2));
+      text(msg2, 0, 0);
+      line(0, 0, 150, 0);
+      pop();
+
+      angleRotate1 += 0.25;
+      angleRotate2 += 0.45;
+
+      stroke(255, 0, 0);
+      strokeWeight(4);
+      point(0, 0);
     }
   </script>
 </body>
