@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <title>Processing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <script src="assets/p5.min.js"></script>
   <style>
     body {
@@ -17,24 +17,31 @@
 
 <body>
   <script>
-    let img1, img2, img3, vid1;
+    let imgBack, imgTop, vidFront, vidLeft, vidRight;
     let curValue = 0;
     let targetValue = 0;
     let abs = 0;
-    let rotateSpeed = 0.05;
-    let easing = 0.25;
+    let rotateSpeed = 0.001;
+    let easing = 0.05;
+    let step = 0; // 0 正面 -1 左邊 1 右邊
 
     function setup() {
       createCanvas(windowWidth, windowHeight, WEBGL);
       textureMode(NORMAL);
-      img1 = loadImage('assets/cat.png');
-      img2 = loadImage('assets/fox.jpg');
-      img3 = loadImage('assets/basketball.png');
-      vid1 = createVideo(['assets/Cube_Face_1.mp4']);
-      vid1.elt.muted = true;
-      vid1.loop();
-      vid1.hide();
-      // windowWidth = window.innerWidth;
+      imgBack = loadImage('assets/imgBack.png');
+      imgTop = loadImage('assets/imgTop.jpg');
+      vidFront = createVideo(['assets/vidFront.mp4']);
+      vidFront.elt.muted = true;
+      vidFront.loop();
+      vidFront.hide();
+      vidLeft = createVideo(['assets/vidLeft.mp4']);
+      vidLeft.elt.muted = true;
+      vidLeft.loop();
+      vidLeft.hide();
+      vidRight = createVideo(['assets/vidRight.mp4']);
+      vidRight.elt.muted = true;
+      vidRight.loop();
+      vidRight.hide();
     }
 
     function draw() {
@@ -47,7 +54,7 @@
 
       // +Z "front" face
       push();
-      texture(vid1);
+      texture(vidFront);
       beginShape();
       vertex(-100, -100, 100, 0, 0);
       vertex(100, -100, 100, 1, 0);
@@ -58,7 +65,7 @@
 
       // -Z "back" face
       push();
-      texture(img1);
+      texture(imgBack);
       beginShape();
       vertex(100, -100, -100, 0, 0);
       vertex(-100, -100, -100, 1, 0);
@@ -69,7 +76,7 @@
 
       // +Y "bottom" face
       push();
-      texture(img2);
+      texture(imgTop);
       beginShape();
       vertex(-100, 100, 100, 0, 0);
       vertex(100, 100, 100, 1, 0);
@@ -80,7 +87,7 @@
 
       // -Y "top" face
       push();
-      texture(img2);
+      texture(imgTop);
       beginShape();
       vertex(-100, -100, -100, 0, 0);
       vertex(100, -100, -100, 1, 0);
@@ -91,7 +98,7 @@
 
       // +X "right" face
       push();
-      texture(vid1);
+      texture(vidLeft);
       beginShape();
       vertex(100, -100, 100, 0, 0);
       vertex(100, -100, -100, 1, 0);
@@ -102,7 +109,7 @@
 
       // -X "left" face
       push();
-      texture(vid1);
+      texture(vidRight);
       beginShape();
       vertex(-100, -100, -100, 0, 0);
       vertex(-100, -100, 100, 1, 0);
@@ -113,12 +120,26 @@
     }
 
     function mouseClicked(event) {
+      vidFront.elt.muted = false;
       if (event.clientX > windowWidth / 2) {
-        targetValue = -PI / 2;
-        abs = -1;
+        step = step + 1 <= 1 ? step + 1 : 1;
       } else {
-        targetValue = PI / 2;
-        abs = 1;
+        step = step - 1 >= -1 ? step - 1 : -1;
+      }
+
+      switch (step) {
+        case 0:
+          targetValue = 0;
+          abs = 0;
+          break;
+        case 1:
+          targetValue = -PI / 2;
+          abs = -1;
+          break;
+        case -1:
+          targetValue = PI / 2;
+          abs = 1;
+          break;
       }
     }
 
