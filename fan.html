@@ -30,6 +30,7 @@
     let curSpeed = 0;
     let curRotate = 0.0;
     let accSpeed = 0.02;
+    let easing = 0.03;
 
     function preload() {
       fanBackgroundImage = loadImage('assets/fanBackgroundImage.png', (img) => {
@@ -54,6 +55,8 @@
       const imageWidth = originWidth1 * ratio;
 
       translate(width / 2, height / 2);
+      // rotate(-curRotate);
+      getProcess();
       rotate(-curRotate);
       imageMode(CENTER);
       const positionX = 25; // fix center
@@ -64,8 +67,9 @@
     function mousePressed() {
       mouseDownInterval = setInterval(() => {
         console.log('mouse down', curSpeed);
-        curSpeed = curSpeed <= maxSpeed ? curSpeed + accSpeed : maxSpeed;
-        curRotate += curSpeed;
+        // curSpeed = curSpeed <= maxSpeed ? curSpeed + accSpeed : maxSpeed;
+        // curRotate += curSpeed;
+        curRotate = getProcess(maxSpeed, true);
       }, 100);
     }
 
@@ -73,12 +77,23 @@
       clearInterval(mouseDownInterval);
       slowDownInterval = setInterval(() => {
         console.log('mouse up', curSpeed);
-        curSpeed = curSpeed > 0 ? curSpeed - accSpeed*2 : 0;
-        curRotate += curSpeed;
+        // curSpeed = curSpeed > 0 ? curSpeed - accSpeed*2 : 0;
+        // curRotate += curSpeed;
+        curRotate = getProcess(0, false);
         if (curSpeed <= 0) {
           clearInterval(slowDownInterval);
         }
       }, 100);
+    }
+
+    function getProcess(targetValue, positive) {
+      if (positive === true) {
+        const d = targetValue - curValue;
+        curValue += d * easing;
+      } else {
+        const d = targetValue - curValue;
+        curValue += d * easing;
+      }
     }
   </script>
 </body>
