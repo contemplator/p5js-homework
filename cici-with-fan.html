@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>刺刺和電風扇</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <script src="assets/p5.min.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    // https://p5js.org/examples/typography-text-rotation.html
+    let msg1 = '春乏夏累秋睏冬眠';
+    let msg2 = '東趴南靠西臥北躺';
+    let msg3 = '';
+    let angleRotate1 = 0.0;
+    let angleRotate2 = 0.0;
+    let font;
+    
+    function preload() {
+      font = loadFont('assets/NotoSansTC-Regular.otf');
+    }
+
+    function setup() {
+      createCanvas(windowWidth, windowHeight, WEBGL);
+      textSize(30);
+      textFont(font);
+      angleRotate1 = -90.0;
+      angleRotate2 = 0; 
+    }
+
+    function draw() {
+      background(0);
+      strokeWeight(1);
+      stroke(153);
+
+      push();
+      rotate(radians(angleRotate1));
+      text(msg1, 0, 0);
+      line(0, 0, 150, 0);
+      pop();
+
+      push();
+      rotate(radians(angleRotate2));
+      text(msg2, 0, 0);
+      line(0, 0, 150, 0);
+      pop();
+
+      angleRotate1 += 0.25;
+      angleRotate2 += 0.45;
+
+      stroke(255, 0, 0);
+      strokeWeight(4);
+      point(0, 0);
+    }
+  </script>
+</body>
+
+</html>

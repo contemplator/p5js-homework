@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Processing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="assets/p5.min.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    // https://p5js.org/examples/typography-text-rotation.html
+    let fanBackgroundImage;
+    let fanLeaveImage;
+    let originHeight1;
+    let originWidth1;
+    let originHeight2;
+    let originWidth2;
+    let mouseDownInterval;
+    let slowDownInterval;
+    let maxSpeed = 2;
+    let curSpeed = 0;
+    let curRotate = 0.0;
+    let accSpeed = 0.02;
+
+    function preload() {
+      fanBackgroundImage = loadImage('assets/fanBackgroundImage.png', (img) => {
+        originHeight1 = fanBackgroundImage.height;
+        originWidth1 = fanBackgroundImage.width;
+      });
+      fanLeaveImage = loadImage('assets/fanLeaveImage.png', (img) => {
+        originHeight2 = fanLeaveImage.height;
+        originWidth2 = fanLeaveImage.width;
+      });
+    }
+
+    function setup() {
+      createCanvas(windowWidth, windowHeight);
+    }
+
+    function draw() {
+      background(255);
+      const maxHeight = windowHeight;
+      const ratio = windowHeight / originHeight1;
+      const imageHeight = originHeight1 * ratio;
+      const imageWidth = originWidth1 * ratio;
+
+      translate(width / 2, height / 2);
+      rotate(-curRotate);
+      imageMode(CENTER);
+      const positionX = 25; // fix center
+      image(fanBackgroundImage, positionX, 0, imageWidth, imageHeight);
+      image(fanLeaveImage, positionX, 0, imageWidth, imageHeight);
+    }
+
+    function mousePressed() {
+      mouseDownInterval = setInterval(() => {
+        console.log('mouse down', curSpeed);
+        curSpeed = curSpeed <= maxSpeed ? curSpeed + accSpeed : maxSpeed;
+        curRotate += curSpeed;
+      }, 100);
+    }
+
+    function mouseReleased() {
+      clearInterval(mouseDownInterval);
+      slowDownInterval = setInterval(() => {
+        console.log('mouse up', curSpeed);
+        curSpeed = curSpeed > 0 ? curSpeed - accSpeed*2 : 0;
+        curRotate += curSpeed;
+        if (curSpeed <= 0) {
+          clearInterval(slowDownInterval);
+        }
+      }, 100);
+    }
+  </script>
+</body>
+
+</html>
