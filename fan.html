@@ -18,8 +18,10 @@
 <body>
   <script>
     // https://p5js.org/examples/typography-text-rotation.html
-    let fanBackgroundImage;
-    let fanLeaveImage;
+    let fanImageBottom, fanImageUp;
+    let fanImageBlade;
+    let acneImage1, acneImage2, acneImage3, acneImage4;
+    let acneHandsImage1, acneHandsImage2, acneHandsImage3;
     let originHeight1;
     let originWidth1;
     let originHeight2;
@@ -29,18 +31,28 @@
     let maxSpeed = 2;
     let curSpeed = 0;
     let curRotate = 0.0;
-    let accSpeed = 0.02;
-    let easing = 0.07;
+    let easing = 0.02;
+    let isBroken = false;
 
     function preload() {
-      fanBackgroundImage = loadImage('assets/fanBackgroundImage.png', (img) => {
-        originHeight1 = fanBackgroundImage.height;
-        originWidth1 = fanBackgroundImage.width;
+      fanImageBottom = loadImage('assets/fan/00_fan_bottom.png', (img) => {
+        originHeight1 = img.height;
+        originWidth1 = img.width;
+        console.log(img.height, img.width);
       });
-      fanLeaveImage = loadImage('assets/fanLeaveImage.png', (img) => {
-        originHeight2 = fanLeaveImage.height;
-        originWidth2 = fanLeaveImage.width;
+      fanImageUp = loadImage('assets/fan/00_fan_up.png');
+      fanImageBlade = loadImage('assets/fan/00_fan_blade.png');
+      acneImage1 = loadImage('assets/fan/01_acne.png', (img) => {
+        originHeight2 = img.height;
+        originWidth2 = img.width;
+        console.log(img.height, img.width);
       });
+      acneImage2 = loadImage('assets/fan/02_acne.gif');
+      acneImage3 = loadImage('assets/fan/03_acne.gif');
+      acneImage4 = loadImage('assets/fan/04_acne.gif');
+      acneHandsImage1 = loadImage('assets/fan/01_acne_hands.png');
+      acneHandsImage2 = loadImage('assets/fan/02_acne_hands.gif');
+      acneHandsImage3 = loadImage('assets/fan/03_acne_hands.gif');
     }
 
     function setup() {
@@ -48,18 +60,63 @@
     }
 
     function draw() {
-      background(255);
-      const maxHeight = windowHeight;
       const ratio = windowHeight / originHeight1;
       const imageHeight = originHeight1 * ratio;
       const imageWidth = originWidth1 * ratio;
 
+      background(255);
       translate(width / 2, height / 2);
-      rotate(-curRotate);
+
+      push();
       imageMode(CENTER);
-      const positionX = 25; // fix center
-      image(fanBackgroundImage, positionX, 0, imageWidth, imageHeight);
-      image(fanLeaveImage, positionX, 0, imageWidth, imageHeight);
+      image(fanImageBottom, -7, 25, imageWidth, imageHeight);
+      pop();
+
+      push();
+      rotate(-curRotate);
+      rectMode(CENTER);
+      imageMode(CENTER);
+      image(fanImageBlade, 0, 0, imageWidth / 2, imageHeight / 2);
+      pop();
+
+      const ratio2 = 0.1;
+      const imageHeight2 = originHeight2 * ratio2;
+      const imageWidth2 = originWidth2 * ratio2;
+      const image2PositionX = 80;
+      const image2PositionY = -245;
+      if (curSpeed < 0.003) {
+        push();
+        imageMode(CENTER);
+        image(acneImage1, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
+        image(acneHandsImage1, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
+        pop();
+        isBroken = false;
+      } else if (curSpeed >= 0.003 && curSpeed < 1 && isBroken === false) {
+        push();
+        imageMode(CENTER);
+        image(acneImage2, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
+        image(acneHandsImage2, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
+        pop();
+      } else if (curSpeed >= 1 && curSpeed < 1.95 && isBroken === false) {
+        push();
+        imageMode(CENTER);
+        image(acneImage3, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
+        image(acneHandsImage3, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
+        pop();
+      } else if (curSpeed > 1.95) {
+        push();
+        if (isBroken === false) {
+          imageMode(CENTER);
+          image(acneImage4, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
+          isBroken = true;
+        }
+        pop();
+      }
+
+      push();
+      imageMode(CENTER);
+      image(fanImageUp, -7, 25, imageWidth, imageHeight);
+      pop();
     }
 
     function mousePressed() {
