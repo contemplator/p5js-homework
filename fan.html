@@ -17,7 +17,6 @@
 
 <body>
   <script>
-    // https://p5js.org/examples/typography-text-rotation.html
     let fanImageBottom, fanImageUp;
     let fanImageBlade;
     let acneImage1, acneImage2, acneImage3, acneImage4;
@@ -38,14 +37,12 @@
       fanImageBottom = loadImage('assets/fan/00_fan_bottom.png', (img) => {
         originHeight1 = img.height;
         originWidth1 = img.width;
-        console.log(img.height, img.width);
       });
       fanImageUp = loadImage('assets/fan/00_fan_up.png');
       fanImageBlade = loadImage('assets/fan/00_fan_blade.png');
       acneImage1 = loadImage('assets/fan/01_acne.png', (img) => {
         originHeight2 = img.height;
         originWidth2 = img.width;
-        console.log(img.height, img.width);
       });
       acneImage2 = loadImage('assets/fan/02_acne.gif');
       acneImage3 = loadImage('assets/fan/03_acne.gif');
@@ -76,22 +73,22 @@
       rotate(-curRotate);
       rectMode(CENTER);
       imageMode(CENTER);
-      image(fanImageBlade, 0, 0, imageWidth / 2, imageHeight / 2);
+      image(fanImageBlade, 0, 0, imageWidth, imageHeight);
       pop();
 
-      const ratio2 = 0.1;
+      const ratio2 = 0.15;
       const imageHeight2 = originHeight2 * ratio2;
       const imageWidth2 = originWidth2 * ratio2;
-      const image2PositionX = 80;
-      const image2PositionY = -245;
-      if (curSpeed < 0.003) {
+      const image2PositionX = 37;
+      const image2PositionY = -95;
+      if (curSpeed < 0.03) {
         push();
         imageMode(CENTER);
         image(acneImage1, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         image(acneHandsImage1, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         pop();
         isBroken = false;
-      } else if (curSpeed >= 0.003 && curSpeed < 1 && isBroken === false) {
+      } else if (curSpeed >= 0.03 && curSpeed < 1 && isBroken === false) {
         push();
         imageMode(CENTER);
         image(acneImage2, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
@@ -120,8 +117,11 @@
     }
 
     function mousePressed() {
+      if (slowDownInterval) {
+        clearInterval(slowDownInterval);
+      }
+
       mouseDownInterval = setInterval(() => {
-        // console.log('mouse down', curSpeed);
         getProcess(maxSpeed, true);
       }, 100);
     }
@@ -129,10 +129,10 @@
     function mouseReleased() {
       clearInterval(mouseDownInterval);
       slowDownInterval = setInterval(() => {
-        // console.log('mouse up', curSpeed);
         getProcess(0, false);
-        if (curSpeed <= 0) {
+        if (curSpeed <= 0.001) {
           clearInterval(slowDownInterval);
+          curSpeed = 0;
         }
       }, 100);
     }
