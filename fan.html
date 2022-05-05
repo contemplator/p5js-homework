@@ -27,7 +27,7 @@
     let originWidth2;
     let mouseDownInterval;
     let slowDownInterval;
-    let maxSpeed = 2;
+    let maxSpeed = 1.5;
     let curSpeed = 0;
     let curRotate = 0.0;
     let easing = 0.02;
@@ -114,6 +114,7 @@
       imageMode(CENTER);
       image(fanImageUp, -7, 25, imageWidth, imageHeight);
       pop();
+      console.log(curSpeed);
     }
 
     function mousePressed() {
