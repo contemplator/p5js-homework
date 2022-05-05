@@ -30,7 +30,7 @@
     let maxSpeed = 1.5;
     let curSpeed = 0;
     let curRotate = 0.0;
-    let easing = 0.02;
+    let easing = 0.05;
     let isBroken = false;
 
     function preload() {
@@ -94,13 +94,13 @@
         image(acneImage2, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         image(acneHandsImage2, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         pop();
-      } else if (curSpeed >= 1 && curSpeed < 1.95 && isBroken === false) {
+      } else if (curSpeed >= 1 && curSpeed < 1.45 && isBroken === false) {
         push();
         imageMode(CENTER);
         image(acneImage3, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         image(acneHandsImage3, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         pop();
-      } else if (curSpeed > 1.95) {
+      } else if (curSpeed > 1.45) {
         push();
         if (isBroken === false) {
           imageMode(CENTER);
