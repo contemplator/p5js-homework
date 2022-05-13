@@ -17,21 +17,38 @@
 
 <body>
   <script>
+    // 圖片
     let fanImageBottom, fanImageUp;
-    let fanImageBlade;
+    let fanImageBlade, fanImageBladeShadow;
     let acneImage1, acneImage2, acneImage3, acneImage4;
     let acneHandsImage1, acneHandsImage2, acneHandsImage3;
+    // 紀錄原始大小，調整比例使用
     let originHeight1;
     let originWidth1;
     let originHeight2;
     let originWidth2;
+    // 滑鼠加速和減慢事件
     let mouseDownInterval;
     let slowDownInterval;
+    // 扇葉旋轉變因
     let maxSpeed = 1.5;
     let curSpeed = 0;
     let curRotate = 0.0;
     let easing = 0.05;
+    // 刺刺是否已經破裂
     let isBroken = false;
+    // 速度狀態
+    let speedMap = {
+      'BREEZE': 0.03,
+      'SLIGHT': 0.8,
+      'MEDIUM': 1.2,
+      'RAPID': 1.45
+    };
+    // BREEZE 階段的輕微搖晃
+    let maxBreezeSpeed = 0.005;
+    let minBreezeSpeed = -0.005;
+    let breezeRotate = 0;
+    let breezeEasing = 0.05;
 
     function preload() {
       fanImageBottom = loadImage('assets/fan/00_fan_bottom.png', (img) => {
@@ -40,6 +57,7 @@
       });
       fanImageUp = loadImage('assets/fan/00_fan_up.png');
       fanImageBlade = loadImage('assets/fan/00_fan_blade.png');
+      fanImageBladeShadow = loadImage('assets/fan/00_fan_blade2.png');
       acneImage1 = loadImage('assets/fan/01_acne.png', (img) => {
         originHeight2 = img.height;
         originWidth2 = img.width;
@@ -54,6 +72,7 @@
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
+      frameRate(30);
     }
 
     function draw() {
@@ -76,31 +95,58 @@
       image(fanImageBlade, 0, 0, imageWidth, imageHeight);
       pop();
 
+      if (curSpeed >= speedMap.MEDIUM ) {
+        push();
+        imageMode(CENTER);
+        rotate(-curRotate + (PI / 3.0));
+        rectMode(CENTER);
+        // tint(255, 130);
+        image(fanImageBladeShadow, 0, 0, imageWidth, imageHeight);
+        pop();
+      }
+
       const ratio2 = 0.15;
       const imageHeight2 = originHeight2 * ratio2;
       const imageWidth2 = originWidth2 * ratio2;
       const image2PositionX = 37;
       const image2PositionY = -95;
-      if (curSpeed < 0.03) {
+      if (curSpeed < speedMap.BREEZE) {
+        // 靜止
         push();
         imageMode(CENTER);
         image(acneImage1, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         image(acneHandsImage1, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         pop();
         isBroken = false;
-      } else if (curSpeed >= 0.03 && curSpeed < 1 && isBroken === false) {
+      } else if (curSpeed >= speedMap.BREEZE && curSpeed < speedMap.SLIGHT && isBroken === false) {
+        // 輕微搖晃
+        push();
+        rotate(random(-0.03, 0.03));
+        // breezeRotate = -breezeRotate;
+        rectMode(CENTER);
+        imageMode(CENTER);
+        image(acneImage1, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
+        pop();
+        push();
+        imageMode(CENTER);
+        image(acneHandsImage1, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
+        pop();
+      } else if (curSpeed >= speedMap.SLIGHT && curSpeed < speedMap.MEDIUM && isBroken === false) {
+        // 中度搖晃
         push();
         imageMode(CENTER);
         image(acneImage2, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         image(acneHandsImage2, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         pop();
-      } else if (curSpeed >= 1 && curSpeed < 1.45 && isBroken === false) {
+      } else if (curSpeed >= speedMap.MEDIUM && curSpeed < speedMap.RAPID && isBroken === false) {
+        // 劇烈搖晃
         push();
         imageMode(CENTER);
         image(acneImage3, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         image(acneHandsImage3, image2PositionX, image2PositionY, imageWidth2, imageHeight2);
         pop();
-      } else if (curSpeed > 1.45) {
+      } else if (curSpeed > speedMap.RAPID) {
+        // 破裂
         push();
         if (isBroken === false) {
           imageMode(CENTER);
