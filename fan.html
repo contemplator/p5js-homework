@@ -22,6 +22,7 @@
     let fanImageBlade, fanImageBladeShadow;
     let acneImage1, acneImage2, acneImage3, acneImage4;
     let acneHandsImage1, acneHandsImage2, acneHandsImage3;
+    let snowImage;
     // 紀錄原始大小，調整比例使用
     let fanOriginSize;
     let originHeight2;
@@ -79,6 +80,7 @@
       acneHandsImage1 = loadImage('assets/fan/01_acne_hands.png');
       acneHandsImage2 = loadImage('assets/fan/02_acne_hands.gif');
       acneHandsImage3 = loadImage('assets/fan/03_acne_hands.gif');
+      snowImage = loadImage('assets/fan/snow.png');
     }
 
     function setup() {
@@ -110,6 +112,28 @@
       image(fanImageBottom, fanPositionX, fanPositionY, fanImageSize, fanImageSize);
       pop();
 
+      // 雪花
+      if (curSpeed >= speedMap.RAPID) {
+        push();
+        imageMode(CENTER);
+        translate(random(0, fanImageSize), random(0, -fanImageSize));
+        image(snowImage, fanPositionX, fanPositionY, fanImageSize, fanImageSize);
+        pop();
+      } else if (curSpeed >= speedMap.MEDIUM) {
+        push();
+        imageMode(CENTER);
+        translate(random(0, fanImageSize / 2), random(0, -fanImageSize / 2));
+        image(snowImage, fanPositionX, fanPositionY, fanImageSize, fanImageSize);
+        pop();
+      } else if (curSpeed >= speedMap.SLIGHT) {
+        push();
+        imageMode(CENTER);
+        translate(random(0, fanImageSize / 4), random(0, -fanImageSize / 4));
+        image(snowImage, fanPositionX, fanPositionY, fanImageSize, fanImageSize);
+        pop();
+      }
+
+      // 風扇扇葉
       if (curSpeed >= speedMap.MEDIUM) {
         push();
         translate(fanPositionX, fanBladePositionY);
