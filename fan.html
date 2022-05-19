@@ -63,6 +63,11 @@
     let acneTailPositionX = 0;
     let acneTailPositionY = 0;
 
+    const host = 'https://us-central1-woolito-metaverse.cloudfunctions.net/';
+    const url = 'https://us-central1-woolito-metaverse.cloudfunctions.net/updateAcneScore';
+    const key = 'Test3';
+    let score = 0;
+
     function preload() {
       fanImageBottom = loadImage('assets/fan/00_fan_bottom.png', (img) => {
         fanOriginSize = img.height;
@@ -81,6 +86,26 @@
       acneHandsImage2 = loadImage('assets/fan/02_acne_hands.gif');
       acneHandsImage3 = loadImage('assets/fan/03_acne_hands.gif');
       snowImage = loadImage('assets/fan/snow.png');
+
+      fetch(host + 'getAcneScore', {
+        method: 'POST',
+        body: JSON.stringify({
+          key: key
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          console.log(res);
+          score = res.score
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
 
     function setup() {
@@ -106,6 +131,9 @@
 
     function draw() {
       background(233);
+
+      textSize(32);
+      text(score, 8, 32);
 
       push();
       imageMode(CENTER);
@@ -196,6 +224,7 @@
           imageMode(CENTER);
           image(acneImage4, acnePositionX, acnePositionY, acneImageWidth, acneImageHeight);
           isBroken = true;
+          updateScore();
         }
         pop();
       }
@@ -206,14 +235,14 @@
       pop();
 
       // 繪製中心點
-      push();
-      noStroke();
-      fill(255, 0, 0);
-      circle(fanPositionX, fanPositionY, 10);
-      circle(fanBladePositionX, fanBladePositionY, 10);
-      circle(acnePositionX, acnePositionY, 10);
-      circle(acneTailPositionX, acneTailPositionY, 10);
-      pop();
+      // push();
+      // noStroke();
+      // fill(255, 0, 0);
+      // circle(fanPositionX, fanPositionY, 10);
+      // circle(fanBladePositionX, fanBladePositionY, 10);
+      // circle(acnePositionX, acnePositionY, 10);
+      // circle(acneTailPositionX, acneTailPositionY, 10);
+      // pop();
     }
 
     function mousePressed() {
@@ -246,6 +275,30 @@
         curSpeed += d * easing;
       }
       curRotate += curSpeed;
+    }
+
+    function updateScore() {
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          key: key,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          console.log(res);
+          if (res === true) {
+            score++;
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   </script>
 </body>
